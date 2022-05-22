@@ -17,3 +17,6 @@ easy-es:
   address: 101.42.149.252:9200
   username:
   password:
+
+swagger:
+  try-host: http://101.42.106.206:${server.port}

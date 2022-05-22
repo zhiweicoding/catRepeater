@@ -51,8 +51,10 @@ public class SwaggerConfig implements WebMvcConfigurer {
                 .addSecuritySchemes("basicScheme", new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("basic"))
                 .addParameters("myHeader1", new Parameter().in("header").schema(new StringSchema()).name("myHeader1"))
                 //注：这种方式有问题，不推荐
-                .addHeaders("myHeader2", new Header().description("myHeader2 header").schema(new StringSchema()).extensions(myHeader2extensions))
-                .addParameters("myGlobalHeader", new HeaderParameter().required(true).name("My-Global-Header").description("My Global Header").schema(new StringSchema()).required(false))
+                .addHeaders("myHeader2", new Header().description("myHeader2 header")
+                        .schema(new StringSchema()).extensions(myHeader2extensions))
+                .addParameters("myGlobalHeader",
+                        new HeaderParameter().required(true).name("My-Global-Header").description("My Global Header").schema(new StringSchema()).required(false))
         ;
 
         // 接口调试路径
@@ -69,7 +71,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
                         .license(new License().name("Apache 2.0").url("https://www.apache.org/licenses/LICENSE-2.0.html"))
                 )
                 .externalDocs(new ExternalDocumentation()
-                        .description("SpringDoc Full Documentation")
+                        .description("接口文档")
                         .url("https://springdoc.org/")
                 );
     }

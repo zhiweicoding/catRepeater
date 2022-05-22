@@ -18,3 +18,6 @@ easy-es:
   address: 127.0.0.1:9200
   username:
   password:
+
+swagger:
+  try-host: http://localhost:${server.port}

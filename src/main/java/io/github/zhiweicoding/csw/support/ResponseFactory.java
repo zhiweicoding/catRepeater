@@ -1,6 +1,6 @@
 package io.github.zhiweicoding.csw.support;
 
-import io.github.zhiweicoding.csw.models.BaseResponse;
+import io.github.zhiweicoding.csw.entity.BaseResponse;
 
 /**
  * @Created by zhiwei on 2022/3/27.

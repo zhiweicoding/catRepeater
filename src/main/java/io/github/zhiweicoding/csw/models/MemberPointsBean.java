@@ -23,26 +23,26 @@ public class MemberPointsBean extends BaseMapperBean implements Serializable {
     @TableId(value = "points_id", type = IdType.INPUT)
     @Schema(name = "主键", description = "主键", example = "1")
     private String pointsId;
-    @TableId(value = "user_id")
+    @TableField(value = "user_id")
     @Schema(name = "用户ID", description = "用户ID")
     private String userId;
-    @TableId(value = "total_money")
+    @TableField(value = "total_money")
     private Double totalMoney;
-    @TableId(value = "leave_money")
+    @TableField(value = "leave_money")
     private Double leaveMoney;
-    @TableId(value = "level_id")
+    @TableField(value = "level_id")
     private String levelId;
-    @TableId(value = "pay_type")
+    @TableField(value = "pay_type")
     private String payType;
-    @TableId(value = "receipt_money")
+    @TableField(value = "receipt_money")
     private String receiptMoney;
-    @TableId(value = "which_radio")
+    @TableField(value = "which_radio")
     private Integer whichRadio;
-    @TableId(value = "bank_money")
+    @TableField(value = "bank_money")
     private Double bankMoney;
-    @TableId(value = "need_notice")
+    @TableField(value = "need_notice")
     private Integer needNotice;
-    @TableId(value = "ext_msg")
+    @TableField(value = "ext_msg")
     private String extMsg;
 
     @TableField(exist = false)

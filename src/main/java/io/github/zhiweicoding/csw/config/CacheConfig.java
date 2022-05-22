@@ -18,7 +18,6 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-import java.io.Serial;
 import java.time.Duration;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -51,8 +50,7 @@ public class CacheConfig {
         RedisCacheConfiguration s60 = RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofSeconds(60)).serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(stringRedisSerializer)).serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jsonSerializer())).disableCachingNullValues().prefixCacheNameWith("srw_");
         RedisCacheConfiguration s30 = RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofSeconds(30)).serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(stringRedisSerializer)).serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jsonSerializer())).disableCachingNullValues().prefixCacheNameWith("srw_");
 
-        Map<String, RedisCacheConfiguration> redisCacheConfigurationMap = new LinkedHashMap<>(8) {
-            @Serial
+        Map<String, RedisCacheConfiguration> redisCacheConfigurationMap = new LinkedHashMap<String, RedisCacheConfiguration>(8) {
             private static final long serialVersionUID = 2474073019770319870L;
 
             {

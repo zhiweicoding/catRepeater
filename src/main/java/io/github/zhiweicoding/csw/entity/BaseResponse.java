@@ -1,4 +1,4 @@
-package io.github.zhiweicoding.csw.models;
+package io.github.zhiweicoding.csw.entity;
 
 import java.io.Serializable;
 

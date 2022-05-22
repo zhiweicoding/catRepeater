@@ -29,57 +29,57 @@ public class UserBean extends BaseMapperBean implements Serializable {
     /**
      *
      */
-    @TableId(value = "user_id", type = IdType.AUTO)
-    private Integer userId;
-    @TableId(value = "open_id")
+    @TableId(value = "user_id", type = IdType.INPUT)
+    private String userId;
+    @TableField(value = "open_id")
     private String openId;
-    @TableId(value = "public_open_id")
+    @TableField(value = "public_open_id")
     private String publicOpenId;
-    @TableId(value = "ali_open_id")
+    @TableField(value = "ali_open_id")
     private String aliOpenId;
-    @TableId(value = "tt_open_id")
+    @TableField(value = "tt_open_id")
     private String ttOpenId;
-    @TableId(value = "baidu_open_id")
+    @TableField(value = "baidu_open_id")
     private String baiduOpenId;
-    @TableId(value = "is_real_name")
+    @TableField(value = "is_real_name")
     private Integer isRealName;
-    @TableId(value = "member_points_id")
+    @TableField(value = "member_points_id")
     private String memberPointsId;
-    @TableId(value = "member_id")
+    @TableField(value = "member_id")
     private String memberId;
-    @TableId(value = "nick_name")
+    @TableField(value = "nick_name")
     private String nickName;
-    @TableId(value = "user_mobile")
+    @TableField(value = "user_mobile")
     private String userMobile;
-    @TableId(value = "avatar_url")
+    @TableField(value = "avatar_url")
     private String avatarUrl;
-    @TableId(value = "union_id")
+    @TableField(value = "union_id")
     private String unionId;
-    @TableId(value = "province")
+    @TableField(value = "province")
     private String province;
-    @TableId(value = "city")
+    @TableField(value = "city")
     private String city;
-    @TableId(value = "country")
+    @TableField(value = "country")
     private String country;
-    @TableId(value = "gender")
+    @TableField(value = "gender")
     private Integer gender;
-    @TableId(value = "language")
+    @TableField(value = "language")
     private String language;
-    @TableId(value = "type_id")
+    @TableField(value = "type_id")
     private String typeId;
-    @TableId(value = "password")
+    @TableField(value = "password")
     private String password;
-    @TableId(value = "notice_id")
+    @TableField(value = "notice_id")
     private String noticeId;
-    @TableId(value = "zhifubao_id")
+    @TableField(value = "zhifubao_id")
     private String zhifubaoId;
-    @TableId(value = "real_name")
+    @TableField(value = "real_name")
     private String realName;
-    @TableId(value = "user_type")
+    @TableField(value = "user_type")
     private String userType;
-    @TableId(value = "remark_msg")
+    @TableField(value = "remark_msg")
     private String remarkMsg;
-    @TableId(value = "is_member")
+    @TableField(value = "is_member")
     private Integer isMember;
     @TableField(exist = false)
     private static final long serialVersionUID = 1234567896L;

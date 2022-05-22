@@ -1,7 +1,8 @@
 package io.github.zhiweicoding.csw.dao.es;
 
 import com.xpc.easyes.core.conditions.interfaces.BaseEsMapper;
-import io.github.zhiweicoding.csw.models.ContentBean;
+import io.github.zhiweicoding.csw.models.UserBean;
+import io.github.zhiweicoding.csw.services.UserService;
 import org.springframework.stereotype.Component;
 
 /**
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
  * @Entity com.smartcode.books.models.ContentMapper
  */
 @Component
-public interface ContentMapper extends BaseEsMapper<ContentBean> {
+public interface UserMapper extends BaseEsMapper<UserBean> {
 
 }
 
