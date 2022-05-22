@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,23 +68,34 @@ public class UserSupport implements Support<List<CanalEntry.Entry>>, EsNeedJob<L
     }
 
     @Override
-    public boolean match(String name) {
-        return tableName.equals(name);
-    }
-
-    @Override
     public void save(List<List<CanalEntry.Column>> columns) {
         List<UserBean> us = new ArrayList<>();
         for (List<CanalEntry.Column> cs : columns) {
             UserBean u = new UserBean();
+            Method[] methods = u.getClass().getMethods();
+            us.add(u);
             for (CanalEntry.Column c : cs) {
                 String name = c.getName();
                 String value = c.getValue();
                 boolean updated = c.getUpdated();
                 boolean isNull = c.getIsNull();
-
+                if (!isNull) {
+                    for (Method method : methods) {
+                        String methodSetStr = method.getName().toLowerCase();
+                        String getSetStr = ("set" + name.replace("_", "")).toLowerCase();
+                        if (methodSetStr.equals(getSetStr)) {
+                            try {
+                                method.invoke(u, value);
+                            } catch (IllegalAccessException | InvocationTargetException e) {
+                                log.error(e.getMessage(), e);
+                            }
+                            break;
+                        }
+                    }
+                }
             }
         }
+        userMapper.insertBatch(us, tableName);
     }
 
     @Override

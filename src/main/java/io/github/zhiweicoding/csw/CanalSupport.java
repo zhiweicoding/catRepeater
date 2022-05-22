@@ -6,6 +6,7 @@ import com.alibaba.otter.canal.common.utils.AddressUtils;
 import com.alibaba.otter.canal.protocol.CanalEntry;
 import com.alibaba.otter.canal.protocol.Message;
 import io.github.zhiweicoding.csw.dao.es.UserMapper;
+import io.github.zhiweicoding.csw.support.es.UserSupport;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
@@ -20,6 +21,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 /**
  * @Created by zhiwei on 2022/5/22.
@@ -31,7 +33,7 @@ public class CanalSupport implements CommandLineRunner {
     protected CanalConnector connector;
 
     @Autowired
-    private UserMapper userMapper;
+    private UserSupport userSupport;
 
     protected static int batchSize = 1000;
 
@@ -51,7 +53,7 @@ public class CanalSupport implements CommandLineRunner {
             ExecutorService executorService = Executors.newSingleThreadExecutor();
             Future<?> submit = executorService.submit(() -> {
                 try {
-                    while (true){
+                    while (true) {
                         Message message = connector.getWithoutAck(batchSize); // 获取指定数量的数据
                         long batchId = message.getId();
                         int size = message.getEntries().size();
@@ -74,38 +76,11 @@ public class CanalSupport implements CommandLineRunner {
         }
     }
 
-    private static void printEntry(List<CanalEntry.Entry> entries) throws Exception {
-        for (CanalEntry.Entry entry : entries) {
-            if (entry.getEntryType() == CanalEntry.EntryType.TRANSACTIONBEGIN || entry.getEntryType() == CanalEntry.EntryType.TRANSACTIONEND) {
-                continue;
-            }
+    private void printEntry(List<CanalEntry.Entry> entries) {
+        userSupport.init(entries.stream()
+                .filter(bean -> bean.getHeader().getTableName().equals(UserSupport.tableName))
+                .collect(Collectors.toList()));
 
-            CanalEntry.RowChange rowChange = CanalEntry.RowChange.parseFrom(entry.getStoreValue());
-
-            CanalEntry.EventType eventType = rowChange.getEventType();
-            System.out.printf("================&gt; binlog[%s:%s] , name[%s,%s] , eventType : %s%n",
-                    entry.getHeader().getLogfileName(), entry.getHeader().getLogfileOffset(),
-                    entry.getHeader().getSchemaName(), entry.getHeader().getTableName(),
-                    eventType);
-
-            for (CanalEntry.RowData rowData : rowChange.getRowDatasList()) {
-                if (eventType == CanalEntry.EventType.DELETE) {
-                    printColumn(rowData.getBeforeColumnsList());
-                } else if (eventType == CanalEntry.EventType.INSERT) {
-                    printColumn(rowData.getAfterColumnsList());
-                } else {
-                    System.out.println("-------&gt; before");
-                    printColumn(rowData.getBeforeColumnsList());
-                    System.out.println("-------&gt; after");
-                    printColumn(rowData.getAfterColumnsList());
-                }
-            }
-        }
     }
 
-    private static void printColumn(List<CanalEntry.Column> columns) {
-        for (CanalEntry.Column column : columns) {
-            System.out.println(column.getName() + " : " + column.getValue() + "    update=" + column.getUpdated());
-        }
-    }
 }
