@@ -41,8 +41,6 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, MenuBean> implements M
     @Autowired
     private ImgDao imgDao;
 
-    @Autowired
-    private FactoryDao factoryDao;
 
     @Autowired
     private RedisSupport redisSupport;

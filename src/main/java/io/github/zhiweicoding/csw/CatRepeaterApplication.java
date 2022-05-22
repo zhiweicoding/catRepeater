@@ -20,10 +20,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EsMapperScan("io.github.zhiweicoding.csw.dao.es")
 @EnableConfigurationProperties
 @EnableAspectJAutoProxy
-public class CSWApplication {
+public class CatRepeaterApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(CSWApplication.class, args);
+        SpringApplication.run(CatRepeaterApplication.class, args);
     }
 
 }

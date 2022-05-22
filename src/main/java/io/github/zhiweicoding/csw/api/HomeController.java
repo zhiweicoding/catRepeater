@@ -1,23 +1,21 @@
 package io.github.zhiweicoding.csw.api;
 
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import io.github.zhiweicoding.csw.models.BaseResponse;
 import io.github.zhiweicoding.csw.models.BookBean;
-import io.github.zhiweicoding.csw.models.FactoryBean;
-import io.github.zhiweicoding.csw.services.BookService;
-import io.github.zhiweicoding.csw.services.FactoryService;
 import io.github.zhiweicoding.csw.support.ResponseFactory;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 首页

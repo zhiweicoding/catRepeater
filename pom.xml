@@ -141,7 +141,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.6.4</version>
                 <configuration>
-                    <mainClass>io.github.zhiweicoding.csw.CSWApplication</mainClass>
+                    <mainClass>io.github.zhiweicoding.csw.CatRepeaterApplication</mainClass>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>

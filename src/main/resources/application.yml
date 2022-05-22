@@ -15,7 +15,7 @@ spring:
     auto: true
     proxy-target-class: true
   application:
-    name: csw
+    name: catRepeater
   datasource:
     url: jdbc:mysql://10.0.4.8:3306/books?useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -104,5 +104,5 @@ springdoc:
 swagger:
   application-name: ${spring.application.name}
   application-version: 1.0
-  application-description: springdoc openapi整合Demo
+  application-description: open api测试
   try-host: http://localhost:${server.port}

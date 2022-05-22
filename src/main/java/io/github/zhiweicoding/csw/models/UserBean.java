@@ -6,8 +6,12 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
+import java.util.Date;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
@@ -17,80 +21,66 @@ import lombok.experimental.Accessors;
  */
 @TableName(value = "t_user")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Accessors(chain = true)
+@Schema(name = "用户信息表", description = "用户信息表")
 public class UserBean extends BaseMapperBean implements Serializable {
     /**
      *
      */
     @TableId(value = "user_id", type = IdType.AUTO)
     private Integer userId;
-
-    /**
-     * 用户昵称
-     */
-    @TableField(value = "user_name")
-    private String userName;
-
-    /**
-     * 用户昵称
-     */
-    @TableField(value = "password")
-    private String password;
-
-    /**
-     * 各个第三方对应的open_id
-     */
-    @TableField(value = "open_id")
+    @TableId(value = "open_id")
     private String openId;
-
-    /**
-     * 微信的联合id
-     */
-    @TableField(value = "union_id")
-    private String unionId;
-
-    /**
-     * 这边的联合ID
-     */
-    @TableField(value = "self_union_id")
-    private String selfUnionId;
-
-    /**
-     * 第三方平台的昵称
-     */
-    @TableField(value = "nick_name")
+    @TableId(value = "public_open_id")
+    private String publicOpenId;
+    @TableId(value = "ali_open_id")
+    private String aliOpenId;
+    @TableId(value = "tt_open_id")
+    private String ttOpenId;
+    @TableId(value = "baidu_open_id")
+    private String baiduOpenId;
+    @TableId(value = "is_real_name")
+    private Integer isRealName;
+    @TableId(value = "member_points_id")
+    private String memberPointsId;
+    @TableId(value = "member_id")
+    private String memberId;
+    @TableId(value = "nick_name")
     private String nickName;
-
-    /**
-     * 国家
-     */
-    @TableField(value = "country")
-    private String country;
-
-    /**
-     * 地区
-     */
-    @TableField(value = "province")
+    @TableId(value = "user_mobile")
+    private String userMobile;
+    @TableId(value = "avatar_url")
+    private String avatarUrl;
+    @TableId(value = "union_id")
+    private String unionId;
+    @TableId(value = "province")
     private String province;
-
-    /**
-     * 城市
-     */
-    @TableField(value = "city")
+    @TableId(value = "city")
     private String city;
-
-    /**
-     * 性别
-     */
-    @TableField(value = "sexy")
-    private Integer sexy;
-
-    /**
-     * 第三方的名称
-     */
-    @TableField(value = "user_from")
-    private Integer userFrom;
-
+    @TableId(value = "country")
+    private String country;
+    @TableId(value = "gender")
+    private Integer gender;
+    @TableId(value = "language")
+    private String language;
+    @TableId(value = "type_id")
+    private String typeId;
+    @TableId(value = "password")
+    private String password;
+    @TableId(value = "notice_id")
+    private String noticeId;
+    @TableId(value = "zhifubao_id")
+    private String zhifubaoId;
+    @TableId(value = "real_name")
+    private String realName;
+    @TableId(value = "user_type")
+    private String userType;
+    @TableId(value = "remark_msg")
+    private String remarkMsg;
+    @TableId(value = "is_member")
+    private Integer isMember;
     @TableField(exist = false)
     private static final long serialVersionUID = 1234567896L;
 }
