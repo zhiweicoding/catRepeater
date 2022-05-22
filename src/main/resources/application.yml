@@ -1,0 +1,108 @@
+logging:
+  config: classpath:logback-spring.xml
+  level:
+    root: info
+    org.springframework: info
+    com.smartcode: debug
+
+server:
+  port: 8089
+
+spring:
+  profiles:
+    active: dev
+  aop:
+    auto: true
+    proxy-target-class: true
+  application:
+    name: csw
+  datasource:
+    url: jdbc:mysql://10.0.4.8:3306/books?useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: csdiao210!
+    hikari:
+      connection-timeout: 10000
+      validation-timeout: 3000
+      idle-timeout: 60000
+      login-timeout: 5
+      max-lifetime: 60000
+      maximum-pool-size: 10
+      minimum-idle: 5
+      read-only: false
+  config:
+    activate:
+      on-profile:
+  cache:
+    redis:
+      cache-null-values: false
+  redis:
+    lettuce:
+      pool:
+        max-active: 8 # 连接池最大连接数
+        max-idle: 8 # 连接池最大空闲连接数
+        min-idle: 0 # 连接池最小空闲连接数
+        max-wait: -1ms # 连接池最大阻塞等待时间，负值表示没有限制
+    host: 127.0.0.1
+    port: 6379
+    password: csdiao210
+
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+easy-es:
+  global-config:
+    print-dsl: true
+    process_index_mode: manual #smoothly:平滑模式, not_smoothly:非平滑模式, manual:手动模式
+  enable: true
+  address: 127.0.0.1:9200
+  username:
+  password:
+  connectTimeout: 5000
+  socketTimeout: 5000
+  requestTimeout: 5000
+  connectionRequestTimeout: 5000
+  maxConnTotal: 100
+  maxConnPerRoute: 100
+
+cos:
+  secretId: AKIDEI7f0A5mERQAfute9PQDk24pKabeV5OQ
+  secretKey: nRq0tXv3vXswkIYXFgqiJdgT6WfW7RVI
+  region: ap-shanghai
+  bucket: booklib-1309974988
+  baseUrl: https://booklib-1309974988.cos.ap-shanghai.myqcloud.com/
+
+# ===== SpringDoc配置 =====#
+springdoc:
+  swagger-ui:
+    # 自定义的文档界面访问路径。默认访问路径是/swagger-ui.html
+    path: /springdoc/docs.html
+    # 字符串类型，一共三个值来控制操作和标记的默认展开设置。它可以是“list”（仅展开标记）、“full”（展开标记和操作）或“none”（不展开任何内容）。
+    docExpansion: none
+    # 布尔值。控制“试用”请求的请求持续时间（毫秒）的显示。
+    displayRequestDuration: true
+    # 布尔值。控制供应商扩展（x-）字段和操作、参数和架构值的显示。
+    showExtensions: true
+    # 布尔值。控制参数的扩展名（pattern、maxLength、minLength、maximum、minminimum）字段和值的显示。
+    showCommonExtensions: true
+    # 布尔值。禁用swagger用户界面默认petstore url。（从v1.4.1开始提供）。
+    disable-swagger-default-url: true
+
+  api-docs:
+    # enabled the /v3/api-docs endpoint
+    enabled: true
+    # 自定义的文档api元数据访问路径。默认访问路径是/v3/api-docs
+    path: /springdoc/api-docs
+    # 布尔值。在@Schema（名称name、标题title和说明description，三个属性）上启用属性解析程序。
+    resolve-schema-properties: true
+  # 布尔值。实现OpenApi规范的打印。
+  writer-with-default-pretty-printer: true
+
+# ===== swagger配置 =====#
+swagger:
+  application-name: ${spring.application.name}
+  application-version: 1.0
+  application-description: springdoc openapi整合Demo
+  try-host: http://localhost:${server.port}
