@@ -12,14 +12,24 @@ public interface Support<T> {
      */
     void init(T t);
 
+    default boolean match(String name) {
+        return false;
+    }
+
     /**
      * 开始操作
      *
      * @return
      */
-    boolean start();
+    default boolean start() {
+        return false;
+    }
 
-    boolean stop();
+    default boolean stop() {
+        return false;
+    }
 
-    boolean clear();
+    default boolean clear() {
+        return false;
+    }
 }

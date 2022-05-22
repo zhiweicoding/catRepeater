@@ -10,7 +10,7 @@ server:
 
 spring:
   profiles:
-    active: prod
+    active: dev
   aop:
     auto: true
     proxy-target-class: true

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.xpc.easyes.core.enums.FieldType;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -17,14 +18,17 @@ import java.time.format.DateTimeFormatter;
 public class BaseMapperBean {
 
     @TableField(value = "is_delete", fill = FieldFill.INSERT_UPDATE)
+    @com.xpc.easyes.core.anno.TableField(value = "is_delete", fieldType = FieldType.INTEGER)
     private Integer isDelete;
 
 //    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "Asia/Shanghai")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @TableField(value = "create_time", fill = FieldFill.INSERT_UPDATE)
+    @com.xpc.easyes.core.anno.TableField(value = "create_time",fieldType = FieldType.DATE,dateFormat="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;
     @TableField(exist = false)
+    @com.xpc.easyes.core.anno.TableField(exist = false)
     private String createTimeStr;
 
     public void setCreateTime(LocalDateTime createTime) {
@@ -35,8 +39,10 @@ public class BaseMapperBean {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @TableField(value = "modify_time", fill = FieldFill.INSERT_UPDATE)
+    @com.xpc.easyes.core.anno.TableField(value = "create_time",fieldType = FieldType.DATE,dateFormat="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime modifyTime;
     @TableField(exist = false)
+    @com.xpc.easyes.core.anno.TableField(exist = false)
     private String modifyTimeStr;
 
     public void setModifyTime(LocalDateTime modifyTime) {
