@@ -10,7 +10,7 @@ server:
 
 spring:
   profiles:
-    active: dev
+    active: prod
   aop:
     auto: true
     proxy-target-class: true
@@ -57,15 +57,15 @@ easy-es:
     print-dsl: true
     process_index_mode: manual #smoothly:平滑模式, not_smoothly:非平滑模式, manual:手动模式
   enable: true
-  address: 127.0.0.1:9200
+  address: 101.42.149.252:9200
   username:
   password:
-  connectTimeout: 5000
-  socketTimeout: 5000
-  requestTimeout: 5000
-  connectionRequestTimeout: 5000
-  maxConnTotal: 100
-  maxConnPerRoute: 100
+  connectTimeout: 60000
+  socketTimeout: 60000
+  requestTimeout: 60000
+  connectionRequestTimeout: 60000
+  maxConnTotal: 200
+  maxConnPerRoute: 200
 
 cos:
   secretId: AKIDEI7f0A5mERQAfute9PQDk24pKabeV5OQ
@@ -105,3 +105,6 @@ swagger:
   application-name: ${spring.application.name}
   application-version: 1.0
   application-description: open api测试
+
+canalConfig:
+  table: pet\.t_address,pet\.t_breeder,pet\.t_category,pet\.t_category_product,pet\.t_good,pet\.t_ipad,pet\.t_member_points,pet\.t_member_points_record,pet\.t_order,pet\.t_pay,pet\.t_protect,pet\.t_user

@@ -5,23 +5,20 @@ import com.alibaba.otter.canal.client.CanalConnectors;
 import com.alibaba.otter.canal.common.utils.AddressUtils;
 import com.alibaba.otter.canal.protocol.CanalEntry;
 import com.alibaba.otter.canal.protocol.Message;
-import io.github.zhiweicoding.csw.dao.es.UserMapper;
-import io.github.zhiweicoding.csw.support.es.UserSupport;
+import io.github.zhiweicoding.csw.support.es.*;
+import io.github.zhiweicoding.csw.support.es.job.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationRunner;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.net.InetSocketAddress;
 import java.util.List;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.stream.Collectors;
 
 /**
  * @Created by zhiwei on 2022/5/22.
@@ -33,17 +30,35 @@ public class CanalSupport implements CommandLineRunner {
     protected CanalConnector connector;
 
     @Autowired
-    private UserSupport userSupport;
+    private EsCommonSupport esCommonSupport;
+    @Autowired
+    private EsGoodSupport esGoodSupport;
+    @Autowired
+    private EsProtectSupport esProtectSupport;
+    @Autowired
+    private EsIpadSupport esIpadSupport;
+    @Autowired
+    private EsManager esManager;
+    @Autowired
+    private EsOrderSupport esOrderSupport;
+    @Value("${canalConfig.table}")
+    private String canalTable;
 
-    protected static int batchSize = 1000;
+    protected static int batchSize = 2000;
 
     @PostConstruct
     public void prepare() {
         InetSocketAddress address = new InetSocketAddress(AddressUtils.getHostIp(), 11111);
         connector = CanalConnectors.newSingleConnector(address, "example", "", "");
         connector.connect();
-        connector.subscribe("pet\\.t_order,pet\\.t_good,pet\\.t_user");
+        connector.subscribe(canalTable);
         connector.rollback();
+
+        esManager.addJob(esCommonSupport);
+        esManager.addJob(esGoodSupport);
+        esManager.addJob(esIpadSupport);
+        esManager.addJob(esProtectSupport);
+        esManager.addJob(esOrderSupport);
     }
 
     @Override
@@ -58,7 +73,7 @@ public class CanalSupport implements CommandLineRunner {
                         long batchId = message.getId();
                         int size = message.getEntries().size();
                         if (batchId == -1 || size == 0) {
-                            Thread.sleep(500);
+                            Thread.sleep(1000);
                         } else {
                             printEntry(message.getEntries());
                         }
@@ -77,9 +92,11 @@ public class CanalSupport implements CommandLineRunner {
     }
 
     private void printEntry(List<CanalEntry.Entry> entries) {
-        userSupport.init(entries.stream()
-                .filter(bean -> bean.getHeader().getTableName().equals(UserSupport.tableName))
-                .collect(Collectors.toList()));
+        try {
+            esManager.adapter(entries).doBulk().clear();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
 
     }
 

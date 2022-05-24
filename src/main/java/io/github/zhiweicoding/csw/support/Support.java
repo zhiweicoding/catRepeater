@@ -10,11 +10,7 @@ public interface Support<T> {
     /**
      * 初始化
      */
-    void init(T t);
-
-    default boolean match(String name) {
-        return false;
-    }
+    default void init(T t){}
 
     /**
      * 开始操作

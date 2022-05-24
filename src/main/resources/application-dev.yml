@@ -15,7 +15,7 @@ spring:
     password:
 
 easy-es:
-  address: 127.0.0.1:9200
+  address: 101.42.149.252:9200
   username:
   password:
 

@@ -96,7 +96,7 @@ public class CanalTest {
 
     private static void printColumn(List<Column> columns) {
         for (Column column : columns) {
-            System.out.println(column.getName() + " : " + column.getValue() + "    update=" + column.getUpdated());
+            System.out.println(column.getName() + " : " + column.getValue() + "    update=" + column.getUpdated()+" "+column.getMysqlType()+column.getIsKey()+column.getIndex()+column.getSqlType());
         }
     }
 }

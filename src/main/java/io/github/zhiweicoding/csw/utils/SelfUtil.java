@@ -5,6 +5,10 @@ package io.github.zhiweicoding.csw.utils;
  */
 public class SelfUtil {
 
+    public static boolean isJson(String val) {
+        return val.contains("{") && val.contains("}") && val.contains("\"") && val.contains(":");
+    }
+
     public static boolean isEmpty(String any) {
         return any == null || any.equals("") || any.equals("null");
     }
@@ -36,6 +40,6 @@ public class SelfUtil {
     public static void main(String[] args) {
         System.out.println("“不忘初心、牢记使命”主题教育总结大会上的重要".indexOf("“"));
         System.out.println(processTitle("“不忘初心、牢记使命”主题“不忘初心、牢记使命”教育总结大会上的重要", "“不忘初心、牢记使命”"));
-        System.out.println(throwsAfterTitle("“不忘初心、牢记使命”主题“不忘初心、牢记使命”教育总结大会上的重要","大会"));
+        System.out.println(throwsAfterTitle("“不忘初心、牢记使命”主题“不忘初心、牢记使命”教育总结大会上的重要", "大会"));
     }
 }

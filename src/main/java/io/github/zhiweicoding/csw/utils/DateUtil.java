@@ -3,6 +3,7 @@ package io.github.zhiweicoding.csw.utils;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
@@ -16,5 +17,10 @@ public class DateUtil {
 
     public static LocalDateTime getLdt(String val) {
         return LocalDateTime.parse(val, LOCAL_DATE_TIME_ALL);
+    }
+
+    public static long getTimeStamp(String val) {
+        LocalDateTime parse = LocalDateTime.parse(val, LOCAL_DATE_TIME_ALL);
+        return parse.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
     }
 }
