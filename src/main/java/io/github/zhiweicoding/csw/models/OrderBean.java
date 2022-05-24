@@ -10,11 +10,12 @@ import lombok.experimental.Accessors;
 /**
  * @Created by zhiwei on 2022/5/22.
  */
-@TableName(value = "t_user")
+@TableName(value = "t_order")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
 @Schema(name = "用户信息表", description = "用户信息表")
 public class OrderBean {
+    private String orderId;
 }

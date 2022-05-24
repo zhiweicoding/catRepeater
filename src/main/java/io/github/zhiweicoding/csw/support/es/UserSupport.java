@@ -5,14 +5,19 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import io.github.zhiweicoding.csw.dao.es.UserMapper;
 import io.github.zhiweicoding.csw.models.UserBean;
 import io.github.zhiweicoding.csw.support.Support;
+import io.github.zhiweicoding.csw.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @Created by zhiwei on 2022/5/22.
@@ -25,6 +30,11 @@ public class UserSupport implements Support<List<CanalEntry.Entry>>, EsNeedJob<L
     private UserMapper userMapper;
 
     public static final String tableName = "t_user";
+
+    public static void main(String[] args) {
+        UUID uuid = UUID.randomUUID();
+        System.out.println(uuid.toString().replace("-", ""));
+    }
 
     @Override
     public void init(List<CanalEntry.Entry> entries) {
@@ -85,8 +95,23 @@ public class UserSupport implements Support<List<CanalEntry.Entry>>, EsNeedJob<L
                         String getSetStr = ("set" + name.replace("_", "")).toLowerCase();
                         if (methodSetStr.equals(getSetStr)) {
                             try {
-                                method.invoke(u, value);
-                            } catch (IllegalAccessException | InvocationTargetException e) {
+                                Class<?>[] parameterTypes = method.getParameterTypes();
+                                Class<?> parameterType = parameterTypes[0];
+                                if (parameterType.getName().contains("java.lang.String")) {
+                                    method.invoke(u, value);
+                                } else if (parameterType.getName().contains("java.lang.Integer")) {
+                                    method.invoke(u, Integer.parseInt(value));
+                                } else if (parameterType.getName().contains("java.lang.Long")) {
+                                    method.invoke(u, Long.parseLong(value));
+                                } else if (parameterType.getName().contains("java.time.LocalDateTime")) {
+                                    LocalDateTime ldt = DateUtil.getLdt(value);
+                                    method.invoke(u, ldt);
+                                } else if (parameterType.getName().contains("java.lang.Double")) {
+                                    method.invoke(u, Double.parseDouble(value));
+                                } else if (parameterType.getName().contains("java.lang.Float")) {
+                                    method.invoke(u, Float.parseFloat(value));
+                                }
+                            } catch (Exception e) {
                                 log.error(e.getMessage(), e);
                             }
                             break;

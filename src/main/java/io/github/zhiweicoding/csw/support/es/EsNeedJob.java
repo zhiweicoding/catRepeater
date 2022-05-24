@@ -5,9 +5,14 @@ package io.github.zhiweicoding.csw.support.es;
  */
 public interface EsNeedJob<T> {
 
-    void save(T t);
+    default void save(T t) {
+    }
 
-    void update(T t);
+    default void update(T t) {
+    }
 
-    void delete(T t);
+    default void delete(T t) {
+    }
+
+    void bulk(T t);
 }
