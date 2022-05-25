@@ -11,14 +11,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.net.InetSocketAddress;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 /**
  * @Created by zhiwei on 2022/5/22.
@@ -44,7 +43,10 @@ public class CanalSupport implements CommandLineRunner {
     @Value("${canalConfig.table}")
     private String canalTable;
 
-    protected static int batchSize = 5000;
+    protected static int batchSize = 10000;
+
+    private ExecutorService mindService;
+    private ExecutorService jobService;
 
     @PostConstruct
     public void prepare() {
@@ -59,21 +61,23 @@ public class CanalSupport implements CommandLineRunner {
         esManager.addJob(esIpadSupport);
         esManager.addJob(esProtectSupport);
         esManager.addJob(esOrderSupport);
+
+        //从线程池启动一个single线程
+        mindService = Executors.newSingleThreadExecutor();
+        jobService = Executors.newFixedThreadPool(20);
     }
 
     @Override
     public void run(String... args) {
         try {
-            //从线程池启动一个single线程
-            ExecutorService executorService = Executors.newSingleThreadExecutor();
-            Future<?> submit = executorService.submit(() -> {
+            Future<?> submit = mindService.submit(() -> {
                 try {
                     while (true) {
                         Message message = connector.getWithoutAck(batchSize); // 获取指定数量的数据
                         long batchId = message.getId();
                         int size = message.getEntries().size();
                         if (batchId == -1 || size == 0) {
-                            Thread.sleep(800);
+                            Thread.sleep(1500);
                         } else {
                             printEntry(message.getEntries());
                         }
@@ -88,16 +92,23 @@ public class CanalSupport implements CommandLineRunner {
             log.error(e.getMessage(), e);
         } finally {
             connector.disconnect();
+            mindService.shutdown();
         }
     }
 
     private void printEntry(List<CanalEntry.Entry> entries) {
         try {
-            esManager.adapter(entries).doBulk().clear();
+            Future<?> submit = jobService.submit(() -> {
+                try {
+                    esManager.adapter(entries).doBulk().clear();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            });
+            submit.get(20, TimeUnit.SECONDS);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
-
     }
 
 }

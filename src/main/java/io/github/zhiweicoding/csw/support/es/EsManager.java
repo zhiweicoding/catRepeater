@@ -64,6 +64,7 @@ public class EsManager {
             }
         }
         if (request.requests().size() > 0) {
+
             client.bulkAsync(request, RequestOptions.DEFAULT, new ActionListener<BulkResponse>() {
                 @Override
                 public void onResponse(BulkResponse response) {
