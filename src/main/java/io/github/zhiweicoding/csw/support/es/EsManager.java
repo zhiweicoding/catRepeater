@@ -131,22 +131,26 @@ public class EsManager {
             String mysqlType = c.getMysqlType();
             boolean isNull = c.getIsNull();
             if (!isNull && !"".equals(value)) {
-                if (mysqlType.contains("varchar") || mysqlType.contains("text") || mysqlType.contains("longtext")) {
-                    if (value.contains("{") && value.contains("}")) {
-                        esNeedJob.assembly(params, name, value);
-                    } else {
-                        params.put(name, value);
-                    }
+                try {
+                    if (mysqlType.contains("varchar") || mysqlType.contains("text") || mysqlType.contains("longtext")) {
+                        if (value.contains("{") && value.contains("}")) {
+                            esNeedJob.assembly(params, name, value);
+                        } else {
+                            params.put(name, value);
+                        }
 
-                } else if (mysqlType.contains("datetime")) {
-                    params.put(name, DateUtil.getTimeStamp(value));
-                } else if (mysqlType.contains("int")) {
-                    params.put(name, Integer.parseInt(value));
-                } else {
-                    params.put(name, Float.parseFloat(value));
-                }
-                if (isKey && i == 0) {
-                    params.put("_id", value);
+                    } else if (mysqlType.contains("datetime")) {
+                        params.put(name, DateUtil.getTimeStamp(value));
+                    } else if (mysqlType.contains("int")) {
+                        params.put(name, Integer.parseInt(value));
+                    } else {
+                        params.put(name, Float.parseFloat(value));
+                    }
+                    if (isKey && i == 0) {
+                        params.put("_id", value);
+                    }
+                } catch (Exception e) {
+                    log.error("c:{},job:{},错误信息：{}", c, esNeedJob.getClass().getName(), e.getMessage(), e);
                 }
             }
             i++;
