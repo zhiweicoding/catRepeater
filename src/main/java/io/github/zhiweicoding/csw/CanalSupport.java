@@ -44,7 +44,7 @@ public class CanalSupport implements CommandLineRunner {
     @Value("${canalConfig.table}")
     private String canalTable;
 
-    protected static int batchSize = 2000;
+    protected static int batchSize = 5000;
 
     @PostConstruct
     public void prepare() {
@@ -73,7 +73,7 @@ public class CanalSupport implements CommandLineRunner {
                         long batchId = message.getId();
                         int size = message.getEntries().size();
                         if (batchId == -1 || size == 0) {
-                            Thread.sleep(1000);
+                            Thread.sleep(800);
                         } else {
                             printEntry(message.getEntries());
                         }
