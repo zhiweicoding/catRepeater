@@ -1,14 +1,9 @@
 package io.github.zhiweicoding.csw.api;
 
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import io.github.zhiweicoding.csw.entity.BaseMsg;
 import io.github.zhiweicoding.csw.entity.BaseResponse;
-import io.github.zhiweicoding.csw.models.MemberPointsBean;
-import io.github.zhiweicoding.csw.models.UserBean;
 import io.github.zhiweicoding.csw.services.MemberPointsService;
-import io.github.zhiweicoding.csw.services.UserService;
 import io.github.zhiweicoding.csw.support.ResponseFactory;
-import io.github.zhiweicoding.csw.utils.GeneratorUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -18,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  * @author zhiwei
