@@ -24,7 +24,8 @@ import java.util.concurrent.*;
  */
 @Component
 @Slf4j
-public class CanalSupport implements CommandLineRunner {
+public class CanalSupport {
+//public class CanalSupport implements CommandLineRunner {
 
     protected CanalConnector connector;
 
@@ -48,53 +49,53 @@ public class CanalSupport implements CommandLineRunner {
     private ExecutorService mindService;
     private ExecutorService jobService;
 
-    @PostConstruct
-    public void prepare() {
-        InetSocketAddress address = new InetSocketAddress(AddressUtils.getHostIp(), 11111);
-        connector = CanalConnectors.newSingleConnector(address, "example", "", "");
-        connector.connect();
-        connector.subscribe(canalTable);
-        connector.rollback();
+//    @PostConstruct
+//    public void prepare() {
+//        InetSocketAddress address = new InetSocketAddress(AddressUtils.getHostIp(), 11111);
+//        connector = CanalConnectors.newSingleConnector(address, "example", "", "");
+//        connector.connect();
+//        connector.subscribe(canalTable);
+//        connector.rollback();
+//
+//        esManager.addJob(esCommonSupport);
+//        esManager.addJob(esGoodSupport);
+//        esManager.addJob(esIpadSupport);
+//        esManager.addJob(esProtectSupport);
+//        esManager.addJob(esOrderSupport);
+//
+//        //从线程池启动一个single线程
+//        mindService = Executors.newSingleThreadExecutor();
+//        jobService = Executors.newFixedThreadPool(20);
+//    }
 
-        esManager.addJob(esCommonSupport);
-        esManager.addJob(esGoodSupport);
-        esManager.addJob(esIpadSupport);
-        esManager.addJob(esProtectSupport);
-        esManager.addJob(esOrderSupport);
-
-        //从线程池启动一个single线程
-        mindService = Executors.newSingleThreadExecutor();
-        jobService = Executors.newFixedThreadPool(20);
-    }
-
-    @Override
-    public void run(String... args) {
-        try {
-            Future<?> submit = mindService.submit(() -> {
-                try {
-                    while (true) {
-                        Message message = connector.getWithoutAck(batchSize); // 获取指定数量的数据
-                        long batchId = message.getId();
-                        int size = message.getEntries().size();
-                        if (batchId == -1 || size == 0) {
-                            Thread.sleep(1500);
-                        } else {
-                            printEntry(message.getEntries());
-                        }
-                        connector.ack(batchId); // 提交确认
-                    }
-                } catch (Exception e) {
-                    log.error(e.getMessage(), e);
-                }
-            });
-            submit.get();
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        } finally {
-            connector.disconnect();
-            mindService.shutdown();
-        }
-    }
+//    @Override
+//    public void run(String... args) {
+//        try {
+//            Future<?> submit = mindService.submit(() -> {
+//                try {
+//                    while (true) {
+//                        Message message = connector.getWithoutAck(batchSize); // 获取指定数量的数据
+//                        long batchId = message.getId();
+//                        int size = message.getEntries().size();
+//                        if (batchId == -1 || size == 0) {
+//                            Thread.sleep(1500);
+//                        } else {
+//                            printEntry(message.getEntries());
+//                        }
+//                        connector.ack(batchId); // 提交确认
+//                    }
+//                } catch (Exception e) {
+//                    log.error(e.getMessage(), e);
+//                }
+//            });
+//            submit.get();
+//        } catch (Exception e) {
+//            log.error(e.getMessage(), e);
+//        } finally {
+//            connector.disconnect();
+//            mindService.shutdown();
+//        }
+//    }
 
     private void printEntry(List<CanalEntry.Entry> entries) {
         try {
