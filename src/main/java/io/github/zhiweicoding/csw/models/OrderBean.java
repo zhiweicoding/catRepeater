@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import io.github.zhiweicoding.csw.dao.mysql.GoodDao;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,6 +17,8 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Created by zhiwei on 2022/5/22.
@@ -70,6 +73,9 @@ public class OrderBean extends BaseMapperBean implements Serializable {
     private double memberFloat;
     private String trackNumber;
     private String refundMsg;
+
+    @TableField(exist = false)
+    private List<Map<String, Object>> productArray;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 123452672896L;
