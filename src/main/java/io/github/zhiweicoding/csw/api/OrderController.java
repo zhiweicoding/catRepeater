@@ -48,6 +48,7 @@ public class OrderController {
         try {
             List<UserBean> list = userService.list(Wrappers.<UserBean>lambdaQuery().eq(UserBean::getUserMobile, phone));
             if (list.size() > 0) {
+
                 for (UserBean userBean : list) {
                     String userId = userBean.getUserId();
                     if (userId != null) {
@@ -55,6 +56,7 @@ public class OrderController {
                                 .select(OrderBean::getAddressUserName, OrderBean::getAddressMobile, OrderBean::getAddressName, OrderBean::getAddressFullRegion, OrderBean::getProductListId, OrderBean::getOrderRealPrice, OrderBean::getOrderActualPrice, OrderBean::getOrderStatus, OrderBean::getCreateTime, OrderBean::getExtParams)
                                 .eq(OrderBean::getUserId, userId)
                                 .eq(OrderBean::getIsDelete, 0)
+                                .eq(OrderBean::getGoodType, "product")
                                 .notIn(OrderBean::getOrderStatus, 0, -1)
                                 .orderByDesc(OrderBean::getCreateTime)
                         );

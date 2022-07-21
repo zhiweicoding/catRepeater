@@ -25,7 +25,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-@Schema(name = "用户信息表", description = "用户信息表")
 public class OrderBean extends BaseMapperBean implements Serializable {
     @TableId(value = "order_id", type = IdType.INPUT)
     private String orderId;
