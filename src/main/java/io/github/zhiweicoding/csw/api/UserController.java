@@ -77,7 +77,7 @@ public class UserController {
     }
 
     @PostMapping("/query")
-    @Operation(summary = "通过手机号查询", description = "通过手机号查询")
+    @Operation(summary = "通过手机号查询个人信息", description = "通过手机号查询个人信息")
     @Parameters({
             @Parameter(name = "phone", required = true, description = "手机号码")
     })
@@ -122,8 +122,22 @@ public class UserController {
 
                     List<Map<String, Object>> otherArray = orderService.listMaps(wrapper.isNull(OrderBean::getModifyTimeRecord));
 
-                    double weixinSum = weixinArray.stream().mapToDouble(bean -> Double.parseDouble(String.valueOf(bean.get("orderRealPrice")))).sum();
-                    double otherSum = otherArray.stream().mapToDouble(bean -> Double.parseDouble(String.valueOf(bean.get("orderRealPrice")))).sum();
+                    double weixinSum = weixinArray.stream().mapToDouble(bean -> {
+                        String orderRealPrice = String.valueOf(bean.get("orderRealPrice"));
+                        try {
+                            return Double.parseDouble(orderRealPrice);
+                        } catch (NumberFormatException e) {
+                            return 0;
+                        }
+                    }).sum();
+                    double otherSum = otherArray.stream().mapToDouble(bean -> {
+                        String orderRealPrice = String.valueOf(bean.get("orderRealPrice"));
+                        try {
+                            return Double.parseDouble(orderRealPrice);
+                        } catch (NumberFormatException e) {
+                            return 0;
+                        }
+                    }).sum();
                     msg.put("weixinSum", weixinSum);
                     msg.put("otherSum", otherSum);
 
@@ -134,8 +148,8 @@ public class UserController {
             } else {
                 return new ResponseFactory<BaseMsg>().fail(BaseMsg.get().setMsg("找不到用户").setCode(-1));
             }
-        } catch (NumberFormatException e) {
-            return new ResponseFactory<BaseMsg>().fail(BaseMsg.get().setMsg("金额有误").setCode(-1));
+        } catch (Exception e) {
+            return new ResponseFactory<BaseMsg>().fail(BaseMsg.get().setMsg(e.getMessage()).setCode(-1));
         }
     }
 
