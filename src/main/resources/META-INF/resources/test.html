@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>中国海油采办2.0</title>
+</head>
+
+<body>
+  <script>
+    (function () {
+      var JUMP_URL = '/ad/test';
+      var TIME_OUT = 3000; // 请求内网地址超时时间，毫秒
+
+      Ajax(
+        {
+          url: JUMP_URL,
+          method: 'get',
+          timeout: TIME_OUT,
+        },
+        function (error,res) {
+          debugger;
+          if (error != null && error.status === 401) {
+            window.location = 'http://172.16.5.16:31416/redirect.html?return_url=' + window.location.href;
+          }
+          document.getElementById("user-show").innerHTML = res.response;
+        }
+      );
+
+
+      function Ajax(params, callback) {
+        var xmlHttp = false;
+        if (window.XMLHttpRequest) {
+          xmlHttp = new XMLHttpRequest();
+        } else if (window.ActiveXObject) {
+          try {
+            xmlHttp = new ActiveXObject('Msxml2.XMLHTTP');
+          } catch (e) {
+            console.log(e);
+            try {
+              xmlHttp = new ActiveXObject('Microsoft.XMLHTTP');
+            } catch (error) {
+              console.log(error);
+            }
+          }
+        }
+
+        var query = '';
+        if (params.data && JSON.stringify(params.data) !== '{}') {
+          if (params.method === 'get') {
+            for (let key in params.data) {
+              query += '&' + key + '=' + params.data[key];
+            }
+            params.url += '?' + query.substring(1);
+          } else {
+            query = JSON.stringify(params.data);
+          }
+        }
+
+        xmlHttp.open(params.method, params.url, true);
+
+        xmlHttp.setRequestHeader('Cache-Control', 'no-cache');
+        xmlHttp.setRequestHeader('Accept', 'application/json, */*');
+
+        xmlHttp.send(query);
+
+        xmlHttp.onload = function () {
+          var status = xmlHttp.status;
+          if (status === 200) {
+            callback && callback(null, xmlHttp);
+          } else {
+            callback && callback(xmlHttp);
+          }
+        };
+
+        // 超时
+        if (params.timeout) {
+          setTimeout(function () {
+            if (xmlHttp.readyState !== 4) {
+              xmlHttp.abort();
+              callback && callback('timeout');
+            }
+          }, params.timeout);
+        }
+      }
+    })();
+  </script>
+  <div>当前登录用户：<span id="user-show"></span></div>
+  <button onclick="logout();">logout</button>
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+  <script>
+
+    function logout(){
+        $.ajax({
+            url:'http://172.16.5.16:31416/logout',
+            dataType:'jsonp',
+            processData: false,
+            type:'get',
+            success:function(data){
+                alert(data.name);
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown) {
+                alert(XMLHttpRequest.status);
+                alert(XMLHttpRequest.readyState);
+                alert(textStatus);
+            }});
+    }
+
+  </script>
+</body>
+
+</html>

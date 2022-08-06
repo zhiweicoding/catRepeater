@@ -13,6 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -49,6 +53,54 @@ public class MemberPointsServiceImpl
             return BaseMsg.get().setCode(0).setMsg("成功");
         }
 
+    }
+
+    @Override
+    @Transactional
+    public BaseMsg perMonthSendMoney(int type) {
+
+        List<MemberPointsBean> array = memberPointsDao.selectList(Wrappers.<MemberPointsBean>lambdaQuery()
+                .eq(MemberPointsBean::getIsDelete, 0)
+                .eq(MemberPointsBean::getWhichRadio, 5)
+                .gt(MemberPointsBean::getBankMoney, 0)
+                .lt(MemberPointsBean::getCreateTime, LocalDateTime.now().withHour(0).withMinute(0).withSecond(0))
+                .eq(MemberPointsBean::getPayType, "PCREDIT")
+        );
+
+        BigDecimal defaultBig = new BigDecimal("208.33");
+        if (type == 10) {
+            List<MemberPointsBean> allArray = memberPointsDao.selectList(Wrappers.<MemberPointsBean>lambdaQuery()
+                    .eq(MemberPointsBean::getIsDelete, 0)
+                    .gt(MemberPointsBean::getBankMoney, 0)
+                    .lt(MemberPointsBean::getCreateTime, LocalDateTime.now().withHour(0).withMinute(0).withSecond(0))
+                    .eq(MemberPointsBean::getPayType, "ALL")
+            );
+
+            array.addAll(allArray);
+        } else {
+            defaultBig = new BigDecimal("416.66");
+        }
+
+        for (MemberPointsBean item : array) {
+            Double bankMoney = item.getBankMoney();
+            Double leaveMoney = item.getLeaveMoney();
+            try {
+                if (bankMoney <= defaultBig.doubleValue()) {
+                    memberPointsDao.update(null, Wrappers.<MemberPointsBean>lambdaUpdate()
+                            .set(MemberPointsBean::getBankMoney, 0)
+                            .set(MemberPointsBean::getLeaveMoney, bankMoney + leaveMoney)
+                            .eq(MemberPointsBean::getPointsId, item.getPointsId()));
+                } else {
+                    memberPointsDao.update(null, Wrappers.<MemberPointsBean>lambdaUpdate()
+                            .set(MemberPointsBean::getBankMoney, new BigDecimal(bankMoney).subtract(defaultBig).setScale(2, RoundingMode.HALF_UP).doubleValue())
+                            .set(MemberPointsBean::getLeaveMoney, bankMoney + leaveMoney)
+                            .eq(MemberPointsBean::getPointsId, item.getPointsId()));
+                }
+
+            } catch (Exception ignored) {
+            }
+        }
+        return BaseMsg.get().setCode(0).setMsg("成功");
     }
 }
 

@@ -10,5 +10,7 @@ import io.github.zhiweicoding.csw.models.MemberPointsBean;
  */
 public interface MemberPointsService extends IService<MemberPointsBean> {
 
-    BaseMsg insertBlank(String phone,double leave,double have,int type);
+    BaseMsg insertBlank(String phone, double leave, double have, int type);
+
+    BaseMsg perMonthSendMoney(int type);
 }

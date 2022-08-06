@@ -166,6 +166,25 @@
             <artifactId>okhttp</artifactId>
             <version>4.9.3</version>
         </dependency>
+
+<!--        &lt;!&ndash;用户权限管理&ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>xyz.erupt</groupId>-->
+<!--            <artifactId>erupt-upms</artifactId>-->
+<!--            <version>1.10.10</version>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash;接口数据安全&ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>xyz.erupt</groupId>-->
+<!--            <artifactId>erupt-security</artifactId>-->
+<!--            <version>1.10.10</version>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash;后台WEB界面&ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>xyz.erupt</groupId>-->
+<!--            <artifactId>erupt-web</artifactId>-->
+<!--            <version>1.10.10</version>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>
